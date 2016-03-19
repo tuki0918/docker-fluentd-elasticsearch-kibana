@@ -1,0 +1,15 @@
+app:
+  image: busybox
+  volumes:
+    - ./src:/var/www/html
+  tty: true
+  container_name: test-app
+
+php-apache:
+  image: tuki0918/php-apache
+  ports:
+    - "80"
+    - "443"
+  volumes_from:
+    - app
+  container_name: test-web
