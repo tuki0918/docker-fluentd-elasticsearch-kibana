@@ -5,6 +5,14 @@ app:
   tty: true
   container_name: test-app
 
+fluentd:
+  image: fluent/fluentd
+  ports:
+    - "24224:24224"
+  volumes:
+    - ./fluentd:/fluentd/etc
+  container_name: test-fluentd
+
 php-apache:
   image: tuki0918/php-apache
   ports:
@@ -12,4 +20,10 @@ php-apache:
     - "443"
   volumes_from:
     - app
+  links:
+    - fluentd
+  log_driver: fluentd
+  log_opt:
+    fluentd-address: "localhost:24224"
+    fluentd-tag: "docker.{{.FullID}}"
   container_name: test-web
