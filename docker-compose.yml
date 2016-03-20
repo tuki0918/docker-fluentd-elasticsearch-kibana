@@ -7,19 +7,35 @@ app:
 
 fluentd:
   image: fluent/fluentd
-  ports:
-    - "24224:24224"
   volumes:
     - ./fluentd:/fluentd/etc
+  ports:
+    - "24224:24224"
+  links:
+    - elasticsearch:elasticsearch
   container_name: test-fluentd
+
+elasticsearch:
+  image: elasticsearch
+  ports:
+    - "9200:9200"
+  container_name: test-elasticsearch
+
+kibana:
+  image: kibana
+  ports:
+    - "5601:5601"
+  links:
+    - elasticsearch
+  container_name: test-kibana
 
 php-apache:
   image: tuki0918/php-apache
+  volumes_from:
+    - app
   ports:
     - "80"
     - "443"
-  volumes_from:
-    - app
   links:
     - fluentd
   log_driver: fluentd
