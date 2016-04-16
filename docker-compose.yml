@@ -6,7 +6,7 @@ app:
   container_name: test-app
 
 fluentd:
-  image: fluent/fluentd
+  image: tuki0918/docker-fluentd
   volumes:
     - ./fluentd:/fluentd/etc
   ports:
